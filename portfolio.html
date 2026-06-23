@@ -634,7 +634,7 @@
           현재는 베트남 반려동물 플랫폼 <b>Pet On Way</b>를 풀스택으로 개발 중입니다. <b>React + TypeScript</b>로 Zalo Mini App · 병원 어드민 · 플랫폼 어드민 3개 프론트엔드를, FastAPI로 단일 게이트웨이 백엔드를 직접 설계하고 있습니다. Agora 화상진료, ZaloPay 결제, RBAC 멀티 테넌트 구조까지 전 영역을 담당합니다.
         </p>
         <p data-anim>
-          최근에는 <b>Milvus · bge-m3 기반 사내 문서 RAG 어시스턴트</b>와 <b>Asterisk 기반 AI 보이스 에이전트</b>를 직접 설계하며 검색·LLM 영역으로 범위를 넓히고 있습니다. LangChain 없이 청킹 → 임베딩 → 벡터 검색 → 생성 파이프라인을 구현하고, <b>function calling</b>으로 RAG와 보이스 에이전트를 연동했습니다.
+          최근에는 <b>Milvus · text-embedding-3-small 기반 사내 문서 RAG 어시스턴트</b>와 <b>Asterisk 기반 AI 보이스 에이전트</b>를 직접 설계하며 검색·LLM 영역으로 범위를 넓히고 있습니다. LangChain 없이 청킹 → 임베딩 → 벡터 검색 → 생성 파이프라인을 구현하고, <b>function calling</b>으로 RAG와 보이스 에이전트를 연동했습니다.
         </p>
       </div>
     </div>
@@ -669,7 +669,7 @@
         <div class="idx">05 / Strength · AI</div>
         <span class="badge">AI · LLM</span>
         <h4>RAG · AI 보이스 에이전트<span class="dot">.</span></h4>
-        <p><b style="color:var(--text-primary);font-weight:600;">Milvus · bge-m3 기반 의료 도메인 RAG 풀스택 구현</b>, 환각 제로 한국어 콜센터 프롬프트 설계, Asterisk 보이스 에이전트에서 통화 중 <b style="color:var(--text-primary);font-weight:600;">function calling으로 RAG 호출·음성 응답</b>, RAGAS 검색·답변 품질 평가까지 운영.</p>
+        <p><b style="color:var(--text-primary);font-weight:600;">Milvus · text-embedding-3-small 기반 의료 도메인 RAG 풀스택 구현</b>, 환각 제로 한국어 콜센터 프롬프트 설계, Asterisk 보이스 에이전트에서 통화 중 <b style="color:var(--text-primary);font-weight:600;">function calling으로 RAG 호출·음성 응답</b>, RAGAS 검색·답변 품질 평가까지 운영.</p>
       </div>
     </div>
 
@@ -1047,7 +1047,7 @@
           </div>
         </div>
         <ul class="tl-bullets">
-          <li><b>풀스택 RAG 직접 구현</b> — PDF 업로드 → Markdown 변환 → 청킹 → 임베딩 → <b>Milvus</b> 벡터 검색까지 <b>LangChain 없이</b> 전 과정 구현, 흐름 완전 제어.</li>
+          <li><b>풀스택 RAG 직접 구현</b> — PDF 업로드 → Markdown 변환 → 청킹 → <b>text-embedding-3-small 임베딩</b> → <b>Milvus</b> 벡터 검색까지 <b>LangChain 없이</b> 전 과정 구현, 흐름 완전 제어.</li>
           <li><b>음성 RAG</b> — 질문을 음성으로 입력(STT), RAG 답변을 음성으로 출력(TTS). <b>OpenAI Whisper + gpt-4o-mini-tts</b>.</li>
           <li><b>환각 방지 + 검수 도구</b> — 근거 없으면 답을 지어내지 않고, <span class="accent">유사도 점수·출처</span>를 노출하는 관리자 검수 화면으로 KB 품질 관리 (의료 도메인 핵심).</li>
           <li><b>GCP 실 배포 + E2E</b> — Docker Compose(Milvus·nginx·Attu) GCP 배포, <b>Playwright E2E</b>로 전체 플로우 검증, 벡터DB·관리 GUI는 내부망 격리.</li>
