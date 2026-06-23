@@ -542,6 +542,18 @@
     white-space:nowrap;
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ===== print / PDF: keep dark theme ===== */
+  @media print{
+    html,body{
+      background:var(--bg) !important;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .ghost-grid{display:none;}
+    .scroll-cue,.toast{display:none;}
+    section.section{padding:60px 0;}
+  }
 </style>
 </head>
 <body>
