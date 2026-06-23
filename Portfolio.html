@@ -1,0 +1,1335 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KIMYEONGHWAN — Fullstack Engineer</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<style>
+  :root{
+    --bg:#0A0A0A;
+    --bg-alt:#111111;
+    --bg-card:#161616;
+    --text-primary:#F0F0F0;
+    --text-secondary:#888888;
+    --text-dim:#555555;
+    --accent:#39FF14;
+    --border:#222222;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);color:var(--text-primary);}
+  body{
+    font-family:'Pretendard Variable','Pretendard',ui-sans-serif,system-ui,sans-serif;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
+    line-height:1.5;
+  }
+  ::selection{background:var(--accent);color:#000;}
+
+  a{color:inherit;text-decoration:none;}
+  button{font:inherit;background:none;border:0;color:inherit;cursor:pointer;}
+
+  /* ====== shared layout ====== */
+  .wrap{max-width:1440px;margin:0 auto;padding:0 56px;}
+  @media (max-width:768px){.wrap{padding:0 24px;}}
+
+  .ghost-grid{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(240,240,240,0.04) 0 1px, transparent 1px 88px),
+      repeating-linear-gradient(90deg, rgba(240,240,240,0.04) 0 1px, transparent 1px 88px);
+    mix-blend-mode:screen;
+  }
+
+  /* fixed top nav */
+  .topnav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:24px 56px;
+    font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+    mix-blend-mode:difference;
+  }
+  .topnav .brand{color:var(--accent);}
+  .topnav .links{display:flex;gap:32px;color:var(--text-primary);}
+  .topnav .links a{position:relative;}
+  .topnav .links a::before{content:counter(li,decimal-leading-zero);counter-increment:li;margin-right:8px;color:var(--text-dim);}
+  .topnav .links{counter-reset:li;}
+  @media (max-width:768px){.topnav{padding:18px 24px;}.topnav .links{display:none;}}
+
+  /* ===================== HERO ===================== */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    padding:96px 56px 32px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    overflow:hidden;
+  }
+  @media (max-width:768px){.hero{padding:80px 24px 24px;}}
+
+  .hero-meta{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--text-secondary);
+  }
+  .hero-meta .role{color:var(--accent);}
+  .hero-meta .role-sub{display:block;color:var(--text-dim);margin-top:6px;letter-spacing:0.14em;}
+  .hero-meta .year{text-align:right;}
+  .hero-meta .year-sub{display:block;color:var(--text-dim);margin-top:6px;letter-spacing:0.14em;}
+
+  .hero-name{
+    font-weight:900;
+    font-size:clamp(48px, 9vw, 130px);
+    line-height:0.88;
+    letter-spacing:-0.05em;
+    margin:48px 0 16px;
+    color:var(--text-primary);
+  }
+  .hero-name .line{
+    display:block;
+    overflow:hidden;
+  }
+  .hero-name .line .inner{
+    display:inline-block;
+    will-change:transform,clip-path;
+  }
+  .hero-name .dot{color:var(--accent);}
+  .hero-name .slash{
+    display:inline-block;color:var(--accent);font-weight:900;
+    transform:translateY(-0.05em);
+    margin:0 0.08em;
+  }
+  .hero-name .stroke{
+    -webkit-text-stroke:2px var(--text-primary);
+    color:transparent;
+  }
+
+  .hero-bottom{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;
+    margin-top:32px;
+  }
+  .hero-bio{
+    max-width:460px;
+    font-size:15px;line-height:1.7;
+    color:var(--text-secondary);
+  }
+  .hero-bio b{color:var(--text-primary);font-weight:600;}
+  .scroll-cue{
+    font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--text-secondary);
+    display:flex;align-items:center;gap:12px;
+    white-space:nowrap;
+  }
+  .scroll-cue .arrow{
+    display:inline-block;width:14px;height:14px;border-right:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);
+    transform:rotate(45deg) translate(-3px,-3px);
+    animation:scrollPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes scrollPulse{
+    0%,100%{transform:rotate(45deg) translate(-3px,-3px);opacity:.5;}
+    50%{transform:rotate(45deg) translate(2px,2px);opacity:1;}
+  }
+
+  /* ===================== MARQUEE ===================== */
+  .marquee{
+    position:relative;
+    background:var(--accent);
+    color:#000;
+    border-top:1px solid #000;border-bottom:1px solid #000;
+    overflow:hidden;
+    padding:18px 0;
+  }
+  .marquee-track{
+    display:flex;gap:48px;width:max-content;
+    animation:marqueeScroll 28s linear infinite;
+    font-weight:800;text-transform:uppercase;letter-spacing:0.04em;
+    font-size:22px;
+  }
+  .marquee-track span{display:inline-flex;align-items:center;gap:48px;}
+  .marquee-track .star{color:#000;opacity:0.55;font-size:14px;transform:translateY(-1px);}
+  @keyframes marqueeScroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ===================== SECTION SHELL ===================== */
+  section.section{position:relative;padding:160px 0;}
+  @media (max-width:768px){section.section{padding:96px 0;}}
+
+  .section-label{
+    font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);
+    display:flex;align-items:center;gap:14px;margin-bottom:48px;
+  }
+  .section-label::before{
+    content:"";display:inline-block;width:36px;height:1px;background:var(--accent);
+  }
+
+  .section-display{
+    font-weight:900;
+    font-size:clamp(56px, 8vw, 112px);
+    line-height:0.92;
+    letter-spacing:-0.045em;
+    color:var(--text-primary);
+    margin-bottom:96px;
+  }
+  .section-display .gap{display:inline-block;width:0.35em;}
+  .section-display .accent{color:var(--accent);}
+  .section-display .num{
+    display:inline-block;
+    font-size:0.18em;
+    vertical-align:top;
+    font-weight:700;
+    color:var(--text-dim);
+    letter-spacing:0.18em;
+    margin-right:0.5em;
+    transform:translateY(0.4em);
+  }
+
+  /* ===================== 01 ABOUT ===================== */
+  .about-grid{
+    display:grid;
+    grid-template-columns:5fr 7fr;
+    gap:80px;
+    align-items:start;
+  }
+  @media (max-width:900px){.about-grid{grid-template-columns:1fr;gap:48px;}}
+
+  .about-quote{
+    border-left:2px solid var(--accent);
+    padding:6px 0 6px 28px;
+    font-size:24px;font-weight:500;line-height:1.5;color:var(--text-primary);
+    letter-spacing:-0.01em;
+  }
+  .about-quote b{color:var(--accent);font-weight:700;}
+
+  .about-copy p{
+    font-size:16px;line-height:1.9;color:var(--text-secondary);
+    margin-bottom:20px;
+  }
+  .about-copy p:last-child{margin-bottom:0;}
+  .about-copy b{color:var(--text-primary);font-weight:600;}
+
+  .strength-grid{
+    margin-top:80px;
+    display:grid;grid-template-columns:1fr 1fr;gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+  }
+  @media (max-width:700px){.strength-grid{grid-template-columns:1fr;}}
+  .strength{
+    background:var(--bg-card);
+    padding:40px 36px;
+    position:relative;
+    transition:background .25s ease;
+  }
+  .strength:hover{background:#1c1c1c;}
+  .strength .idx{
+    font-size:11px;font-weight:700;letter-spacing:0.18em;color:var(--text-dim);
+    margin-bottom:24px;
+  }
+  .strength h4{
+    font-size:22px;font-weight:800;letter-spacing:-0.01em;
+    margin-bottom:14px;
+  }
+  .strength h4 .dot{color:var(--accent);}
+  .strength p{font-size:14px;line-height:1.7;color:var(--text-secondary);}
+  .strength .badge{
+    position:absolute;top:36px;right:32px;
+    font-size:10px;letter-spacing:0.18em;font-weight:700;color:var(--accent);
+  }
+
+  /* full-width feature strength card (AI / RAG) */
+  .strength.feature{
+    grid-column:1 / -1;
+    padding:48px 40px;
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(57,255,20,0.08) 0%, transparent 55%),
+      var(--bg-card);
+    border-top:2px solid var(--accent);
+  }
+  .strength.feature:hover{background:
+      radial-gradient(120% 140% at 100% 0%, rgba(57,255,20,0.12) 0%, transparent 55%),
+      #1c1c1c;}
+  .strength.feature .idx{color:var(--accent);}
+  .strength.feature h4{
+    font-size:clamp(26px,3vw,34px);margin-bottom:16px;
+  }
+  .strength.feature p{font-size:15px;max-width:760px;}
+  .strength.feature .badge{
+    font-size:11px;letter-spacing:0.2em;
+    border:1px solid var(--accent);padding:5px 12px;border-radius:999px;
+    top:42px;right:40px;
+  }
+  @media (max-width:520px){.strength.feature .badge{display:inline-block;position:static;margin-bottom:18px;}}
+
+  /* ===== About profile (resume header) ===== */
+  .profile-block{
+    display:grid;grid-template-columns:200px 1fr 1fr;gap:56px;align-items:center;
+    margin-bottom:80px;padding-bottom:64px;border-bottom:1px solid var(--border);
+  }
+  @media (max-width:900px){.profile-block{grid-template-columns:140px 1fr;gap:32px;}}
+  @media (max-width:560px){.profile-block{grid-template-columns:1fr;gap:28px;justify-items:start;}}
+  .profile-photo{
+    width:200px;aspect-ratio:3/4;object-fit:cover;
+    border:1px solid var(--border);
+    filter:grayscale(100%);
+    transition:filter .4s ease;
+    background:var(--bg-card);
+  }
+  .profile-photo:hover{filter:grayscale(0%);}
+  @media (max-width:900px){.profile-photo{width:140px;}}
+  @media (max-width:560px){.profile-photo{width:160px;}}
+  .profile-name{
+    font-size:clamp(40px,5vw,64px);font-weight:900;letter-spacing:-0.03em;line-height:1;
+  }
+  .profile-name span{
+    display:block;font-size:13px;font-weight:700;letter-spacing:0.2em;
+    color:var(--text-dim);margin-top:14px;text-transform:uppercase;
+  }
+  .profile-role{
+    margin-top:20px;font-size:12px;font-weight:700;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--accent);
+  }
+  .profile-info{display:flex;flex-direction:column;}
+  .pinfo-row{
+    display:grid;grid-template-columns:110px 1fr;gap:16px;
+    padding:16px 0;border-top:1px dashed var(--border);
+  }
+  .pinfo-row:last-child{border-bottom:1px dashed var(--border);}
+  .pinfo-row .k{
+    font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--text-dim);align-self:center;
+  }
+  .pinfo-row .v{font-size:15px;color:var(--text-primary);}
+  .pinfo-row .v .age{color:var(--text-secondary);font-size:13px;margin-left:6px;}
+  .pinfo-row .v a:hover{color:var(--accent);}
+
+  /* ===================== 02 WORKS ===================== */
+  .work-row{
+    position:relative;
+    display:grid;
+    grid-template-columns:80px 1fr 200px 60px;
+    align-items:center;
+    gap:24px;
+    padding:36px 8px;
+    border-top:1px solid var(--border);
+    cursor:pointer;
+    overflow:hidden;
+  }
+  .work-row:last-child{border-bottom:1px solid var(--border);}
+  .work-row::before{
+    content:"";position:absolute;inset:0;background:var(--accent);
+    transform-origin:left;transform:scaleX(0);transition:transform .55s cubic-bezier(.7,0,.2,1);
+    z-index:0;
+  }
+  .work-row:hover::before{transform:scaleX(1);}
+  .work-row > *{position:relative;z-index:1;transition:color .35s ease;}
+  .work-row:hover .w-idx,
+  .work-row:hover .w-title,
+  .work-row:hover .w-tags,
+  .work-row:hover .w-arrow,
+  .work-row:hover .w-sub{color:#000;}
+
+  .w-idx{font-size:12px;font-weight:700;color:var(--text-dim);letter-spacing:0.18em;}
+  .w-title{font-size:clamp(28px,3.4vw,44px);font-weight:800;letter-spacing:-0.02em;line-height:1.05;}
+  .w-sub{display:block;font-size:13px;font-weight:500;color:var(--text-secondary);letter-spacing:0;margin-top:8px;}
+  .w-tags{font-size:12px;color:var(--text-secondary);letter-spacing:0.06em;text-transform:uppercase;text-align:right;line-height:1.7;}
+  .w-arrow{font-size:24px;color:var(--text-secondary);text-align:right;font-weight:300;}
+  @media (max-width:780px){
+    .work-row{grid-template-columns:48px 1fr 40px;}
+    .w-tags{display:none;}
+  }
+
+  /* KPI spotlight */
+  .kpi-spotlight{
+    margin-top:80px;
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:1px;background:var(--border);border:1px solid var(--border);
+  }
+  @media (max-width:780px){.kpi-spotlight{grid-template-columns:1fr 1fr;}}
+  .kpi{
+    background:var(--bg);padding:36px 28px;
+  }
+  .kpi .num{font-size:48px;font-weight:900;letter-spacing:-0.04em;line-height:1;}
+  .kpi .num .unit{font-size:18px;color:var(--text-secondary);margin-left:4px;font-weight:600;}
+  .kpi .num.accent{color:var(--accent);}
+  .kpi .label{margin-top:14px;font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-secondary);}
+  .kpi .desc{margin-top:10px;font-size:13px;color:var(--text-dim);line-height:1.55;}
+
+  /* ===================== 03 EXPERIENCE ===================== */
+  .timeline-row{
+    display:grid;
+    grid-template-columns:200px 1fr 1.1fr;
+    gap:48px;
+    padding:48px 0;
+    border-top:1px solid var(--border);
+    align-items:start;
+  }
+  .timeline-row:last-child{border-bottom:1px solid var(--border);}
+  @media (max-width:900px){.timeline-row{grid-template-columns:1fr;gap:20px;}}
+
+  .tl-date{
+    font-size:13px;font-weight:700;letter-spacing:0.12em;color:var(--text-secondary);
+    text-transform:uppercase;
+  }
+  .tl-date .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:10px;vertical-align:middle;}
+  .tl-date .status{display:block;color:var(--text-dim);margin-top:6px;font-weight:500;letter-spacing:0.06em;}
+
+  .tl-role h3{font-size:26px;font-weight:800;letter-spacing:-0.01em;line-height:1.2;margin-bottom:8px;}
+  .tl-role .org{font-size:13px;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;font-weight:700;}
+  .tl-role .dept{font-size:13px;color:var(--text-dim);margin-top:4px;}
+
+  .tl-bullets{padding:0;margin:0;list-style:none;}
+  .tl-bullets li{
+    position:relative;padding-left:22px;margin-bottom:14px;
+    font-size:15px;line-height:1.7;color:var(--text-secondary);
+  }
+  .tl-bullets li::before{
+    content:"";position:absolute;left:0;top:11px;width:10px;height:1px;background:var(--accent);
+  }
+  .tl-bullets li b{color:var(--text-primary);font-weight:600;}
+  .tl-bullets li .accent{color:var(--accent);font-weight:700;}
+
+  /* career sub-projects */
+  .career-sub{margin-top:8px;}
+  .career-sub + .career-sub{margin-top:36px;}
+  .career-sub .csub-head{
+    display:flex;align-items:baseline;gap:14px;
+    margin-bottom:14px;
+    padding-bottom:10px;
+    border-bottom:1px dashed var(--border);
+  }
+  .career-sub .csub-no{
+    font-size:11px;font-weight:700;letter-spacing:0.18em;color:var(--accent);
+  }
+  .career-sub .csub-title{
+    font-size:16px;font-weight:700;letter-spacing:-0.01em;color:var(--text-primary);
+    line-height:1.4;
+  }
+  .career-sub .csub-title .org{color:var(--text-dim);font-weight:500;font-size:13px;margin-left:6px;}
+
+  /* ===================== 04 CONTACT ===================== */
+  .contact{
+    padding:160px 0 96px;
+  }
+  .contact-headline{
+    font-weight:900;
+    font-size:clamp(96px,16vw,220px);
+    line-height:0.85;
+    letter-spacing:-0.06em;
+    margin-bottom:64px;
+  }
+  .contact-headline .line2{display:block;color:var(--accent);}
+  .contact-headline .period{color:var(--accent);}
+
+  .contact-grid{
+    display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:end;
+  }
+  @media (max-width:900px){.contact-grid{grid-template-columns:1fr;gap:48px;}}
+
+  .magnetic-wrap{
+    display:inline-block;
+    position:relative;
+  }
+  .magnetic{
+    display:inline-flex;align-items:center;gap:18px;
+    padding:24px 36px;
+    border:1.5px solid var(--accent);
+    color:var(--accent);
+    font-weight:800;font-size:20px;letter-spacing:0.04em;text-transform:uppercase;
+    transition:background .25s ease, color .25s ease;
+    border-radius:999px;
+    will-change:transform;
+  }
+  .magnetic:hover{background:var(--accent);color:#000;}
+  .magnetic .arrow{transition:transform .35s cubic-bezier(.7,0,.2,1);}
+  .magnetic:hover .arrow{transform:translateX(6px);}
+
+  .contact-meta{
+    font-size:14px;line-height:1.9;color:var(--text-secondary);
+  }
+  .contact-meta .row{display:grid;grid-template-columns:90px 1fr;gap:16px;padding:14px 0;border-top:1px dashed var(--border);}
+  .contact-meta .row:last-child{border-bottom:1px dashed var(--border);}
+  .contact-meta .row .k{color:var(--text-dim);font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;align-self:center;}
+  .contact-meta .row .v{color:var(--text-primary);font-size:14px;}
+  .contact-meta .row .v a:hover{color:var(--accent);}
+
+  footer{
+    margin-top:140px;
+    border-top:1px solid var(--border);
+    padding:32px 0;
+    font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);
+    display:flex;justify-content:space-between;
+  }
+  footer .accent{color:var(--accent);}
+
+  /* Education block */
+  .edu-block{margin-top:120px;}
+  .edu-label{
+    font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);
+    display:flex;align-items:center;gap:14px;margin-bottom:32px;
+  }
+  .edu-label span{display:inline-block;width:36px;height:1px;background:var(--accent);}
+  .edu-row{
+    display:grid;grid-template-columns:200px 1fr 220px;gap:48px;align-items:center;
+    padding:36px 0;border-top:1px solid var(--border);
+  }
+  .edu-row:last-child{border-bottom:1px solid var(--border);}
+  @media (max-width:900px){.edu-row{grid-template-columns:1fr;gap:18px;}}
+  .edu-row.cert-row{grid-template-columns:200px 1fr;}
+  @media (max-width:900px){.edu-row.cert-row{grid-template-columns:1fr;}}
+  .cert-row .tl-role h3{font-size:22px;display:inline;}
+  .cert-row .tl-role .org{display:inline;margin-left:14px;font-size:13px;letter-spacing:0.04em;color:var(--text-dim);text-transform:none;font-weight:500;}
+  .edu-stat{text-align:right;}
+  .edu-stat .k{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+  .edu-stat .v{font-size:32px;font-weight:800;letter-spacing:-0.02em;color:var(--text-primary);}
+  .edu-stat .v .accent{color:var(--accent);}
+  .edu-stat .v .slash{color:var(--text-dim);font-weight:400;}
+  @media (max-width:900px){.edu-stat{text-align:left;}}
+
+  /* small util */
+  .reveal-line{overflow:hidden;display:block;}
+
+  @media (max-width:520px){
+    .strength .badge{display:none;}
+    .kpi .num{font-size:36px;}
+  }
+
+  /* ===== experience link button ===== */
+  .exp-link{
+    display:inline-flex;align-items:center;gap:10px;
+    margin-top:28px;
+    padding:10px 20px;
+    border:1px solid var(--border);
+    font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--text-secondary);
+    text-decoration:none;
+    transition:border-color .25s, color .25s, background .25s;
+  }
+  .exp-link:hover{border-color:var(--accent);color:var(--accent);}
+  .exp-link .exp-link-icon{font-size:14px;transition:transform .25s;}
+  .exp-link:hover .exp-link-icon{transform:translate(2px,-2px);}
+
+  /* ===== work external link ===== */
+  .w-link{
+    display:flex;align-items:center;justify-content:center;
+    text-decoration:none;
+    font-size:24px;color:var(--text-secondary);font-weight:300;
+    transition:transform .25s ease;
+  }
+  .work-row:hover .w-link{color:#000;}
+  .w-link:hover{transform:translate(3px,-3px) !important;}
+
+  /* ===== toast ===== */
+  .toast{
+    position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--accent);color:#000;
+    font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+    padding:14px 28px;
+    border-radius:999px;
+    opacity:0;pointer-events:none;
+    transition:opacity .3s ease, transform .3s ease;
+    z-index:999;
+    white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="ghost-grid"></div>
+<div class="toast" id="toast">이메일 복사됨 ✓</div>
+
+<nav class="topnav">
+  <div class="brand">KIMYEONGHWAN ✦ 2026</div>
+  <div class="links">
+    <a href="#about">About</a>
+    <a href="#works">Works</a>
+    <a href="#experience">Experience</a>
+    <a href="#detailed">Detailed</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero">
+  <div class="hero-meta">
+    <div>
+      <span class="role">풀스택 엔지니어 · Fullstack Engineer</span>
+      <span class="role-sub">Available for opportunities</span>
+    </div>
+    <div class="year">
+      <span>2026</span>
+      <span class="year-sub">Gwangju ↔ Remote</span>
+    </div>
+  </div>
+
+  <h1 class="hero-name">
+    <span class="line"><span class="inner">KIMYEONGHWAN</span></span>
+    <span class="line"><span class="inner">FULL<span class="slash">/</span>STACK</span></span>
+    <span class="line"><span class="inner stroke">ENGINEER<span class="dot" style="-webkit-text-stroke:0;color:var(--accent);">.</span></span></span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-bio">
+      <b>백엔드부터 프론트엔드까지</b> 전 영역을 설계하는 풀스택 엔지니어. 대용량 데이터 파이프라인, 비동기 API, <b>React · TypeScript</b> 기반 프론트엔드까지 직접 설계하고 운영합니다. Pandas → Polars 전환으로 처리 시간 70% 단축, 3개 클라이언트를 단일 FastAPI 게이트웨이로 통합.
+    </p>
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <span class="arrow"></span>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ MARQUEE ============================ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>PYTHON <span class="star">✦</span> FASTAPI <span class="star">✦</span> REACT <span class="star">✦</span> TYPESCRIPT <span class="star">✦</span> RAG <span class="star">✦</span> OPENAI <span class="star">✦</span> MILVUS <span class="star">✦</span> LLM <span class="star">✦</span> ASTERISK <span class="star">✦</span> POLARS <span class="star">✦</span> POSTGRESQL <span class="star">✦</span> DOCKER <span class="star">✦</span> AIRFLOW <span class="star">✦</span> AWS <span class="star">✦</span> MSA <span class="star">✦</span></span>
+    <span>PYTHON <span class="star">✦</span> FASTAPI <span class="star">✦</span> REACT <span class="star">✦</span> TYPESCRIPT <span class="star">✦</span> RAG <span class="star">✦</span> OPENAI <span class="star">✦</span> MILVUS <span class="star">✦</span> LLM <span class="star">✦</span> ASTERISK <span class="star">✦</span> POLARS <span class="star">✦</span> POSTGRESQL <span class="star">✦</span> DOCKER <span class="star">✦</span> AIRFLOW <span class="star">✦</span> AWS <span class="star">✦</span> MSA <span class="star">✦</span></span>
+  </div>
+</div>
+
+<!-- ============================ 01 ABOUT ============================ -->
+<section id="about" class="section">
+  <div class="wrap">
+    <div class="section-label" data-anim>About · Profile</div>
+    <h2 class="section-display" data-anim>
+      <span class="num">01</span>ABOUT<span class="accent">.</span>
+    </h2>
+
+    <!-- resume header -->
+    <div class="profile-block" data-anim>
+      <img class="profile-photo" src="profile.jpg" alt="김영환 증명사진" />
+      <div class="profile-id">
+        <div class="profile-name">김영환<span>KIM YEONGHWAN</span></div>
+        <div class="profile-role">풀스택 엔지니어 · Fullstack Engineer</div>
+      </div>
+      <div class="profile-info">
+        <div class="pinfo-row"><span class="k">생년월일</span><span class="v">2003.10.07 <span class="age">(만 22세)</span></span></div>
+        <div class="pinfo-row"><span class="k">휴대폰</span><span class="v"><a href="tel:+821097528990">010-9752-8990</a></span></div>
+        <div class="pinfo-row"><span class="k">주소</span><span class="v">광주광역시 · Gwangju, Korea</span></div>
+        <div class="pinfo-row"><span class="k">이메일</span><span class="v"><a href="mailto:kyh031007@gmail.com">kyh031007@gmail.com</a></span></div>
+      </div>
+    </div>
+
+    <div class="about-grid">
+      <blockquote class="about-quote" data-anim>
+        <!-- "백엔드의 <b>구조</b>와 프론트엔드의 <b>흐름</b>을<br/>함께 설계하는 풀스택 엔지니어." -->
+        "구조를 <b>설계</b>하고 <b>흐름</b>을 잇고,<br/>안 해본 건 배워서 끝내는 빌더형 엔지니어"
+      </blockquote>
+
+      <div class="about-copy">
+        <p data-anim>
+          공공 데이터 플랫폼에서 <b>대용량 CSV 가공 API</b>와 <b>비식별 처리 파이프라인</b>을 설계·운영했습니다. Pandas → Polars 전환과 병목 제거로 100~500MB CSV 처리 시간을 <b>5분 → 1분 30초</b>로, 비식별 처리를 <b>3분 → 1분</b>으로 단축했습니다.
+        </p>
+        <p data-anim>
+          Flask 동기 구조를 <b>FastAPI 비동기 아키텍처</b>로 전환하고, RabbitMQ · Celery · Docker 기반 워커 환경을 직접 구성했습니다. PostgreSQL 복합·부분·GiST 인덱스 설계로 핵심 쿼리 <b>80~90% 단축</b>, Index Scan 100%를 달성했습니다.
+        </p>
+        <p data-anim>
+          현재는 베트남 반려동물 플랫폼 <b>Pet On Way</b>를 풀스택으로 개발 중입니다. <b>React + TypeScript</b>로 Zalo Mini App · 병원 어드민 · 플랫폼 어드민 3개 프론트엔드를, FastAPI로 단일 게이트웨이 백엔드를 직접 설계하고 있습니다. Agora 화상진료, ZaloPay 결제, RBAC 멀티 테넌트 구조까지 전 영역을 담당합니다.
+        </p>
+        <p data-anim>
+          최근에는 <b>Milvus · bge-m3 기반 사내 문서 RAG 어시스턴트</b>와 <b>Asterisk 기반 AI 보이스 에이전트</b>를 직접 설계하며 검색·LLM 영역으로 범위를 넓히고 있습니다. LangChain 없이 청킹 → 임베딩 → 벡터 검색 → 생성 파이프라인을 구현하고, <b>function calling</b>으로 RAG와 보이스 에이전트를 연동했습니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="strength-grid">
+      <div class="strength">
+        <div class="idx">01 / Strength</div>
+        <span class="badge">프론트엔드</span>
+        <h4>React · TypeScript<span class="dot">.</span></h4>
+        <p>Zalo Mini App, 병원 어드민, 플랫폼 어드민 SPA 3종을 React + TypeScript + Vite로 직접 설계. TailwindCSS, react-i18next 다국어, lazy loading · skeleton UI 적용.</p>
+      </div>
+      <div class="strength">
+        <div class="idx">02 / Strength</div>
+        <span class="badge">백엔드</span>
+        <h4>비동기 API 설계<span class="dot">.</span></h4>
+        <p>FastAPI 비동기 구조, MSA API Gateway 패턴, RBAC + JWT, RabbitMQ · Celery 큐 기반 워커 분리, Docker Compose 멀티 컨테이너 운영.</p>
+      </div>
+      <div class="strength">
+        <div class="idx">03 / Strength</div>
+        <span class="badge">데이터</span>
+        <h4>대용량 처리 최적화<span class="dot">.</span></h4>
+        <p>Polars 기반 대용량 CSV 처리, 벡터화·병렬처리, PostgreSQL 복합·부분·GiST 인덱스로 핵심 쿼리·가공 작업 70~90% 단축.</p>
+      </div>
+      <div class="strength">
+        <div class="idx">04 / Strength</div>
+        <span class="badge">인프라</span>
+        <h4>CI/CD · 클라우드<span class="dot">.</span></h4>
+        <p>Jenkins · GitHub · Docker 기반 빌드/배포 자동화, Airflow DAG ETL 스케줄링, AWS S3 · Azure 클라우드 실전 운영.</p>
+      </div>
+
+      <div class="strength feature">
+        <div class="idx">05 / Strength · AI</div>
+        <span class="badge">AI · LLM</span>
+        <h4>RAG · AI 보이스 에이전트<span class="dot">.</span></h4>
+        <p><b style="color:var(--text-primary);font-weight:600;">Milvus · bge-m3 기반 의료 도메인 RAG 풀스택 구현</b>, 환각 제로 한국어 콜센터 프롬프트 설계, Asterisk 보이스 에이전트에서 통화 중 <b style="color:var(--text-primary);font-weight:600;">function calling으로 RAG 호출·음성 응답</b>, RAGAS 검색·답변 품질 평가까지 운영.</p>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="edu-block">
+      <div class="edu-label" data-anim>
+        <span></span>Education · 학력
+      </div>
+      <div class="edu-list">
+        <article class="edu-row">
+          <div class="tl-date">
+            <span><span class="dot"></span>2023.03 — 2026.02</span>
+            <span class="status">졸업</span>
+          </div>
+          <div class="tl-role">
+            <h3>가천대학교 <span style="color:var(--text-dim);font-weight:500;">(글로벌)</span></h3>
+            <div class="org">Gachon University</div>
+            <div class="dept">미래자동차공학과 · Future Automotive Eng.</div>
+          </div>
+          <div class="edu-stat">
+            <div class="k">학점 / GPA</div>
+            <div class="v"><span class="accent">3.7</span><span class="slash"> / </span>4.5</div>
+          </div>
+        </article>
+        <article class="edu-row">
+          <div class="tl-date">
+            <span><span class="dot"></span>2022</span>
+            <span class="status">졸업</span>
+          </div>
+          <div class="tl-role">
+            <h3>광주소프트웨어마이스터고등학교</h3>
+            <div class="org">Gwangju Software Meister High School</div>
+            <div class="dept">임베디드SW학과</div>
+          </div>
+          <div class="edu-stat">
+            <div class="k">Track</div>
+            <div class="v" style="font-size:18px;">임베디드SW학과</div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Certifications (자격증) — 사진 받으면 아래 placeholder를 실제 내용으로 교체 -->
+    <div class="edu-block">
+      <div class="edu-label" data-anim>
+        <span></span>Certifications · 자격증
+      </div>
+      <div class="edu-list">
+        <article class="edu-row cert-row">
+          <div class="tl-date"><span><span class="dot"></span>2019.11</span><span class="status">취득</span></div>
+          <div class="tl-role"><h3>정보기기운용기능사</h3><div class="org">한국산업인력공단</div></div>
+        </article>
+        <article class="edu-row cert-row">
+          <div class="tl-date"><span><span class="dot"></span>2019.12</span><span class="status">취득</span></div>
+          <div class="tl-role"><h3>컴퓨터활용능력 2급</h3><div class="org">대한상공회의소</div></div>
+        </article>
+        <article class="edu-row cert-row">
+          <div class="tl-date"><span><span class="dot"></span>2020.07</span><span class="status">취득</span></div>
+          <div class="tl-role"><h3>정보처리기능사</h3><div class="org">한국산업인력공단</div></div>
+        </article>
+        <article class="edu-row cert-row">
+          <div class="tl-date"><span><span class="dot"></span>2020.09</span><span class="status">취득</span></div>
+          <div class="tl-role"><h3>전기기능사</h3><div class="org">한국산업인력공단</div></div>
+        </article>
+        <article class="edu-row cert-row">
+          <div class="tl-date"><span><span class="dot"></span>2021.07</span><span class="status">취득</span></div>
+          <div class="tl-role"><h3>전자기기기능사</h3><div class="org">한국산업인력공단</div></div>
+        </article>
+        <article class="edu-row cert-row">
+          <div class="tl-date"><span><span class="dot"></span>2023.11</span><span class="status">취득</span></div>
+          <div class="tl-role"><h3>ADsp</h3><div class="org">한국데이터산업진흥원</div></div>
+        </article>
+        <article class="edu-row cert-row">
+          <div class="tl-date"><span><span class="dot"></span>2025</span><span class="status">필기</span></div>
+          <div class="tl-role"><h3>정보처리기사</h3><div class="org">한국산업인력공단</div></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 02 WORKS ============================ -->
+<section id="works" class="section">
+  <div class="wrap">
+    <div class="section-label" data-anim>Selected Works</div>
+    <h2 class="section-display" data-anim>
+      <span class="num">02</span>WORKS<span class="accent">.</span>
+    </h2>
+
+    <div class="works-list">
+      <article class="work-row" data-target="exp-datanuri">
+        <div class="w-idx">/01</div>
+        <div>
+          <div class="w-title">데이터누리<span style="color:var(--accent);">.</span></div>
+          <span class="w-sub">공공 데이터 가공·비식별 플랫폼 백엔드 · Backend / Data Engineer · 실무 경력</span>
+        </div>
+        <div class="w-tags">Flask → FastAPI<br/>Polars · PostgreSQL<br/>RabbitMQ · Celery</div>
+        <div class="w-arrow" title="경력 상세 보기">↓</div>
+      </article>
+
+      <article class="work-row" data-target="exp-pet-on-way">
+        <div class="w-idx">/02</div>
+        <div>
+          <div class="w-title">Pet On Way<span style="color:var(--accent);">.</span></div>
+          <span class="w-sub">베트남 반려동물 비대면 진료 통합 플랫폼 · 풀스택 / 진행 중</span>
+        </div>
+        <div class="w-tags">FastAPI · React · TS<br/>Agora · ZaloPay<br/>MSA · RBAC</div>
+        <a class="w-arrow w-link" href="https://youtu.be/0NeZpGmIvHw" target="_blank" rel="noopener" title="시연 영상">↗</a>
+      </article>
+
+    </div>
+
+    <!-- KPI spotlight -->
+    <div class="kpi-spotlight">
+      < div class="kpi">
+        <div class="num accent">-70<span class="unit">%</span></div>
+        <div class="label">CSV 처리 시간</div>
+        <div class="desc">100–500MB CSV<br/>5분 → 1분 30초</div>
+      </>
+      <div class="kpi">
+        <div class="num accent">-66<span class="unit">%</span></div>
+        <div class="label">비식별 처리</div>
+        <div class="desc">벡터화·병렬처리<br/>3분대 → 1분 내외</div>
+      </div>
+      <div class="kpi">
+        <div class="num accent">80–90<span class="unit">%</span></div>
+        <div class="label">쿼리 단축</div>
+        <div class="desc">복합·부분·GiST 인덱스<br/>Index Scan 100%</div>
+      </div>
+      <div class="kpi">
+        <div class="num">3<span class="unit">클라이언트</span></div>
+        <div class="label">풀스택 멀티 테넌트</div>
+        <div class="desc">Mini App · 병원 · 어드민<br/>단일 FastAPI 게이트웨이</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 03 EXPERIENCE (cards) ============================ -->
+<section id="experience" class="section">
+  <div class="wrap">
+    <div class="section-label" data-anim>Selected Experience</div>
+    <h2 class="section-display" data-anim>
+      <span class="num">03</span>EXPERIENCE<span class="accent">.</span>
+    </h2>
+
+    <div class="exp-card-list">
+      <article class="work-row" data-target="exp-rag-assistant">
+        <div class="w-idx">/01</div>
+        <div>
+          <div class="w-title">RAG 어시스턴트<span style="color:var(--accent);">.</span></div>
+          <span class="w-sub">병원 시스템 RAG 어시스턴트 · 음성 지원 · LangChain 없이 풀스택 구현 · GCP 실 배포</span>
+        </div>
+        <div class="w-tags">RAG · Milvus<br/>Whisper · TTS<br/>React · FastAPI</div>
+        <a class="w-arrow w-link" href="https://www.youtube.com/watch?v=qdNDFimJ0mA" target="_blank" rel="noopener" title="시연 영상">↗</a>
+      </article>
+
+      <article class="work-row" data-target="exp-ava-callcenter">
+        <div class="w-idx">/02</div>
+        <div>
+          <div class="w-title">AI 콜센터<span style="color:var(--accent);">.</span></div>
+          <span class="w-sub">AVA × RAG · Asterisk 음성 에이전트 + 자체 RAG · 콜 스크리닝 · 담당자 전환</span>
+        </div>
+        <div class="w-tags">Asterisk · FreePBX<br/>OpenAI Realtime<br/>RAG 연동</div>
+        <a class="w-arrow w-link" href="https://youtu.be/2FSBHgx7m5s" target="_blank" rel="noopener" title="시연 영상">↗</a>
+      </article>
+
+      <article class="work-row" data-target="exp-hospital-msa">
+        <div class="w-idx">/03</div>
+        <div>
+          <div class="w-title">Hospital MSA<span style="color:var(--accent);">.</span></div>
+          <span class="w-sub">마이크로서비스 기반 병원 예약 시스템 · API Gateway + 인덱스 튜닝</span>
+        </div>
+        <div class="w-tags">FastAPI · PostgreSQL<br/>Docker Compose<br/>API Gateway</div>
+        <a class="w-arrow w-link" href="https://github.com/kyh031007/hospital_reserv_system" target="_blank" rel="noopener" title="GitHub">↗</a>
+      </article>
+
+      <article class="work-row" data-target="exp-etl">
+        <div class="w-idx">/04</div>
+        <div>
+          <div class="w-title">ETL Pipeline<span style="color:var(--accent);">.</span></div>
+          <span class="w-sub">공공데이터 포탈 OpenAPI → Airflow DAG → AWS S3 · Tableau 시각화</span>
+        </div>
+        <div class="w-tags">Airflow · Polars<br/>AWS S3 · Jenkins<br/>Docker</div>
+        <a class="w-arrow w-link" href="https://youtu.be/2Zzb1Okgu4E" target="_blank" rel="noopener" title="시연 영상">↗</a>
+      </article>
+
+      <article class="work-row" data-target="exp-academy">
+        <div class="w-idx">/05</div>
+        <div>
+          <div class="w-title">학원 등하원<span style="color:var(--accent);">.</span></div>
+          <span class="w-sub">실제 학원 요청 기반 웹 운영 시스템 · React + FastAPI · JWT + Redis · 카카오 알림톡</span>
+        </div>
+        <div class="w-tags">FastAPI · React<br/>Redis · JWT<br/>Azure · Jenkins</div>
+        <a class="w-arrow w-link" href="https://www.youtube.com/watch?v=B7W62OVubV8" target="_blank" rel="noopener" title="시연 영상">↗</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 04 DETAILED ============================ -->
+<section id="detailed" class="section">
+  <div class="wrap">
+    <div class="section-label" data-anim>Detailed · 상세 경력</div>
+    <h2 class="section-display" data-anim>
+      <span class="num">04</span>DETAILED<span class="accent">.</span>
+    </h2>
+
+    <div class="timeline">
+      <article class="timeline-row" id="exp-datanuri">
+        <div class="tl-date">
+          <span><span class="dot"></span>2024.02 — 2025.04</span>
+          <span class="status">14 months · 사원</span>
+        </div>
+        <div class="tl-role">
+          <h3>Backend / Data Engineer</h3>
+          <div class="org">데이터누리 — Datanuri</div>
+          <div class="dept">데이터서비스플랫폼 / Data Service Platform</div>
+        </div>
+        <div>
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">01</span>
+              <span class="csub-title">NIA · 행정안전부 기관공유데이터 관리시스템<span class="org">— 데이터 가공(전처리)</span></span>
+            </div>
+            <ul class="tl-bullets">
+              <li>Flask 기반 데이터 전처리 · 저장 · 조회 <b>CRUD API 개발</b>.</li>
+              <li><b>대용량 성능 개선</b> — Pandas → Polars 전환, 100–500MB CSV 크기별 최적화 처리. 처리 시간 <span class="accent">5분 → 1분 30초</span>로 단축(4core/8GB, React+Node+Spring+Flask 동시 구동 환경).</li>
+              <li><b>가공 품질 측정</b> — 정상 범주 기반 품질 검증, 전처리 전후 이상치 · 결측률 · 변환 결과 자동 비교/기록.</li>
+              <li><b>지능형 샘플링</b> — 기본 샘플링 → 자동 컬럼 탐지 기반 지능형 샘플링, 사용자 선택 가공 속도 향상 · 원본 반영 최적화.</li>
+              <li><b>비식별 처리 개선</b> — 벡터화 · 병렬처리로 구조 개선, 처리 속도 <span class="accent">3분대 → 1분 내외</span>로 단축.</li>
+              <li><b>데이터 결합 고도화</b> — 2개 파일 결합 → 다중 파일 결합 구조, 지능형 샘플링으로 사전 확인 속도 개선.</li>
+              <li><b>APScheduler 자동화 파이프라인</b> — 업로드 → 가공 → 결합 자동 실행, 파일 규칙 기반 순차 실행.</li>
+              <li><b>에러 로깅 · 사용자 피드백</b> — 컬럼명 · 전처리 항목 · 오류 데이터 DB 상세 로그, 원인 · 해결법 명확 안내 구조로 개선.</li>
+              <li><b>특성 분석</b> — TF-IDF(scikit-learn) 기반 주요 키워드 · 중요도 분석 기능 추가.</li>
+              <li><b>모듈 리팩토링</b> — 전처리 기능을 모듈 단위로 분리해 확장성 · 유지보수성 향상.</li>
+            </ul>
+          </div>
+
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">02</span>
+              <span class="csub-title">행정안전부 국가공유데이터 플랫폼<span class="org">— 데이터 가공(전처리)</span></span>
+            </div>
+            <ul class="tl-bullets">
+              <li><b>초기 기획 · 설계 참여</b> — 실제 사용 시나리오 기반 기능 설계서 · UI/UX 개선, 신규 기술 스택 추가 의사결정 지원.</li>
+              <li><b>DB 이관 · 표준화</b> — PostgreSQL(JSON 중심) → <b>TmaxTibero 정형 스키마</b>로 구조 전환. 공공기관 표준 테이블 구조 재설계 · ERD 문서화 · 참조 무결성 최적화.</li>
+              <li><b>서비스 구조 고도화</b> — Flask → <b>FastAPI 비동기 구조</b> 전면 마이그레이션, Swagger 자동 문서화 도입, PEP 8 준수 · 예외 처리 표준화.</li>
+              <li><b>비정형 데이터 처리</b> — 이미지 · 비디오 · 오디오 · 문서 · 지도 등 다양한 파일의 공통 메타데이터(해상도 · 인코딩 · 파일 크기) 자동 추출 · 표준화 스키마 저장.</li>
+              <li><b>비동기 시스템 구성 · 검증</b> — RabbitMQ · Celery 기반 병렬 처리 환경을 Docker로 구성, 가공 요청 큐 적재 → Worker 비동기 처리 구조 검증.</li>
+            </ul>
+          </div>
+
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">03</span>
+              <span class="csub-title">Hadoop 기반 데이터 저장 기능 개발</span>
+            </div>
+            <ul class="tl-bullets">
+              <li>HDFS 경로에서 CSV 파일을 읽어 <b>Polars 기반 전처리 후 저장</b>하는 API 개발.</li>
+              <li>데이터 I/O 병목 구간 개선 · 분산 파일 접근 속도 최적화.</li>
+            </ul>
+          </div>
+
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">04</span>
+              <span class="csub-title">민 · 관 협력 지원 플랫폼<span class="org">— 가공 기능 2차 배포</span></span>
+            </div>
+            <ul class="tl-bullets">
+              <li><b>가공 기능 모듈화</b> — 단일 처리 구조를 기능별 모듈로 리팩토링해 재사용성 · 유지보수성 향상.</li>
+              <li>모듈 단위 조합이 가능한 구조로 설계, <b>Docker 기반 배포 자동화</b>로 환경 종속성 최소화.</li>
+            </ul>
+          </div>
+
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">05</span>
+              <span class="csub-title">팀 내 개발 환경 정비 · 가이드 문서화</span>
+            </div>
+            <ul class="tl-bullets">
+              <li><b>개발 환경 세팅 표준화</b> — 공통 라이브러리 버전 · 환경 변수 관리 체계 정립, 신규 인원 onboarding 가이드 작성.</li>
+              <li><b>코드 품질 체계</b> — PEP 8 · black · flake8 자동화, 예외 처리 · 로깅 · 키 접근 공통 가이드, 코드 리뷰 기반 품질 검증 프로세스 운영.</li>
+              <li><b>테스트 · 개발 편의성</b> — Docker Compose 통합 로컬 환경, 실행 · 배포 매뉴얼화, <b>Jenkins 파이프라인 CI/CD</b> 기반 구축.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="timeline-row" id="exp-pet-on-way">
+        <div class="tl-date">
+          <span><span class="dot"></span>2025.12 — 진행 중</span>
+          <span class="status">Ongoing · 풀스택</span>
+        </div>
+        <div class="tl-role">
+          <h3>Pet On Way</h3>
+          <div class="org">Personal Project · 베트남</div>
+          <div class="dept">반려동물 비대면 진료 통합 플랫폼 · Zalo Mini App</div>
+          <a class="exp-link" href="https://youtu.be/0NeZpGmIvHw" target="_blank" rel="noopener">
+            <span>시연 영상</span><span class="exp-link-icon">↗</span>
+          </a>
+        </div>
+        <div>
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">A</span>
+              <span class="csub-title">아키텍처<span class="org">— 멀티 클라이언트 + 단일 FastAPI 게이트웨이</span></span>
+            </div>
+            <ul class="tl-bullets">
+              <li>화상진료 예약 · <b>Agora 1:1 화상 상담</b> · 처방약 배달 · <b>ZaloPay 결제</b>를 하나의 사용자 플로우로 통합.</li>
+              <li>사용자용 Zalo Mini App + 병원 관리 웹 + 플랫폼 어드민 <b>3개 클라이언트</b>가 단일 FastAPI 백엔드를 공유하는 멀티 테넌트 구조.</li>
+              <li><b>RBAC + hospital_id 스코프</b>로 user / hospital_admin / developer 3개 역할을 분리, JWT Access/Refresh 구조.</li>
+            </ul>
+          </div>
+
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">B</span>
+              <span class="csub-title">프론트엔드<span class="org">— React + TypeScript · 3개 클라이언트</span></span>
+            </div>
+            <ul class="tl-bullets">
+              <li><b>Zalo Mini App</b>: React + TypeScript + Vite + zmp-sdk + ZaUI + TailwindCSS, react-i18next(vi/en/ko) 다국어.</li>
+              <li><b>병원 관리 어드민 · 플랫폼 어드민</b>: React + TypeScript + Vite SPA 2종, RBAC 역할별 분기 렌더링.</li>
+              <li>Pillow WebP 자동 변환 + lazy loading · skeleton animation으로 Mini App 10MB 빌드 제약 안 빠른 로딩 확보.</li>
+            </ul>
+          </div>
+
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">C</span>
+              <span class="csub-title">Patient API<span class="org">— Zalo Mini App 연동</span></span>
+            </div>
+            <ul class="tl-bullets">
+              <li><b>Zalo OAuth</b> 로그인 (login → getAccessToken), 최초 로그인 시 전화번호 권한 요청.</li>
+              <li>예약 플로우: 의사 → 날짜 → 시간 슬롯(staff_id 기반 필터링), 중복 예약 방지, 진료 방법(Video/Voice) 선택, 증상 사진 최대 4장 첨부.</li>
+              <li>상태 기반 UI 렌더링 (pending → confirmed → paid → completed/rejected).</li>
+              <li><b>Agora 화상진료</b>, <b>ZaloPay</b> 선결제 + 후정산 하이브리드 모델, 알림 시스템(폴링 기반 unread 배지).</li>
+            </ul>
+          </div>
+
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">D</span>
+              <span class="csub-title">핵심 경험</span>
+            </div>
+            <ul class="tl-bullets">
+              <li><b>Zalo Mini App WebView 제약 우회</b> — iOS WebView 카메라 권한 차단 문제를 <b>openWebview 외부 브라우저</b> 라우팅으로 해결, Agora 세션별 임시 토큰으로 App Certificate 노출 차단.</li>
+              <li><b>결제 환경 추상화</b> — ZaloPay Sandbox 베트남 전화번호 제약을 service layer의 <span class="accent">real / simulate-success</span> 분기로 해결, 외부 키 없이 webhook → 상태 전이 → 알림 E2E 검증.</li>
+              <li><b>Webhook 보안</b> — ZaloPay HMAC SHA256, Zalo OA Secret, IP whitelist, <b>AES-256</b> 전화번호·주소 암호화.</li>
+              <li><b>동적 콘텐츠</b> — 하드코딩 콘텐츠를 DB 기반으로 이전, hospital_id = null 플랫폼 fallback override로 병원별 커스터마이징과 일괄 업데이트 동시 지원.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="timeline-row" id="exp-rag-assistant">
+        <div class="tl-date">
+          <span><span class="dot"></span>2026.06.21 — 06.22</span>
+          <span class="status">Personal Project · GCP 실 배포</span>
+        </div>
+        <div class="tl-role">
+          <h3>병원 시스템 RAG 어시스턴트</h3>
+          <div class="org">Personal Project</div>
+          <div class="dept">RAG 풀스택 · 벡터 검색 · 음성 STT/TTS · React + FastAPI</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;">
+            <a class="exp-link" style="margin-top:0;" href="http://34.158.203.121:5173" target="_blank" rel="noopener">
+              <span>라이브 데모</span><span class="exp-link-icon">↗</span>
+            </a>
+            <a class="exp-link" style="margin-top:0;" href="https://github.com/kyh031007/ack_rag" target="_blank" rel="noopener">
+              <span>GitHub</span><span class="exp-link-icon">↗</span>
+            </a>
+            <a class="exp-link" style="margin-top:0;" href="https://www.youtube.com/watch?v=qdNDFimJ0mA" target="_blank" rel="noopener">
+              <span>시연 영상</span><span class="exp-link-icon">↗</span>
+            </a>
+          </div>
+        </div>
+        <ul class="tl-bullets">
+          <li><b>풀스택 RAG 직접 구현</b> — PDF 업로드 → Markdown 변환 → 청킹 → 임베딩 → <b>Milvus</b> 벡터 검색까지 <b>LangChain 없이</b> 전 과정 구현, 흐름 완전 제어.</li>
+          <li><b>음성 RAG</b> — 질문을 음성으로 입력(STT), RAG 답변을 음성으로 출력(TTS). <b>OpenAI Whisper + gpt-4o-mini-tts</b>.</li>
+          <li><b>환각 방지 + 검수 도구</b> — 근거 없으면 답을 지어내지 않고, <span class="accent">유사도 점수·출처</span>를 노출하는 관리자 검수 화면으로 KB 품질 관리 (의료 도메인 핵심).</li>
+          <li><b>GCP 실 배포 + E2E</b> — Docker Compose(Milvus·nginx·Attu) GCP 배포, <b>Playwright E2E</b>로 전체 플로우 검증, 벡터DB·관리 GUI는 내부망 격리.</li>
+        </ul>
+      </article>
+
+      <article class="timeline-row" id="exp-ava-callcenter">
+        <div class="tl-date">
+          <span><span class="dot"></span>2026.06.17 — 06.23</span>
+          <span class="status">Personal Project · GCP 실 배포</span>
+        </div>
+        <div class="tl-role">
+          <h3>AI 콜센터 (AVA × RAG)</h3>
+          <div class="org">Personal Project</div>
+          <div class="dept">Asterisk · OpenAI Realtime · RAG 연동 · 콜 스크리닝</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;">
+            <a class="exp-link" style="margin-top:0;" href="https://youtu.be/2FSBHgx7m5s" target="_blank" rel="noopener">
+              <span>시연 영상</span><span class="exp-link-icon">↗</span>
+            </a>
+            <a class="exp-link" style="margin-top:0;" href="ava-guide.pdf" download>
+              <span>데모 가이드 PDF</span><span class="exp-link-icon">↓</span>
+            </a>
+          </div>
+        </div>
+        <ul class="tl-bullets">
+          <li><b>AI 전화 상담 (AVA × RAG)</b> — Asterisk(FreePBX) 음성 에이전트에 자체 RAG API를 <b>함수 호출(kb_search)</b>로 연동, 고객이 전화로 오류·사용법을 물으면 AI가 사내 문서 근거로만 실시간 음성 응답.</li>
+          <li><b>콜 스크리닝 후 담당자 전환</b> — 해결이 안 되면 이름·사유를 먼저 확인하고 담당자(내선 6001)로 <b>attended transfer</b>, 담당자에게 발신자 정보를 띄워 전달.</li>
+          <li><b>부재중 처리</b> — 담당자 미응답 시 음성메일(leave_voicemail), 명확한 종료 의사 시 자동 통화 종료까지 상담 전 흐름 자동화.</li>
+          <li><b>환각 차단 응대 설계</b> — 문서에 없으면 지어내지 않고 <span class="accent">"확인되지 않습니다 → 담당자 연결"</span>로 분기, AI가 의료 정보를 임의 생성하지 않도록 프롬프트·도구 레벨에서 통제.</li>
+        </ul>
+      </article>
+
+      <article class="timeline-row" id="exp-hospital-msa">
+        <div class="tl-date">
+          <span><span class="dot"></span>2025.11.05 — 11.08</span>
+          <span class="status">Personal Project · 4 days</span>
+        </div>
+        <div class="tl-role">
+          <h3>마이크로서비스 병원 예약</h3>
+          <div class="org">Personal Project</div>
+          <div class="dept">MSA · API Gateway · PostgreSQL 인덱스 튜닝</div>
+          <a class="exp-link" href="https://github.com/kyh031007/hospital_reserv_system" target="_blank" rel="noopener">
+            <span>GitHub</span><span class="exp-link-icon">↗</span>
+          </a>
+        </div>
+        <div>
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">A</span>
+              <span class="csub-title">Patient API<span class="org">— 환자용 (내부망, 포트 8001)</span></span>
+            </div>
+            <ul class="tl-bullets">
+              <li>의사 목록 조회(진료과 필터링), 병원 운영시간 기반 <b>15분 단위 슬롯</b>, 수용 인원 초과 · 중복 예약 필터링.</li>
+              <li>초진/재진 자동 판별, 시술 소요시간 기반 종료시간 자동 계산.</li>
+            </ul>
+          </div>
+          <div class="career-sub">
+            <div class="csub-head">
+              <span class="csub-no">B</span>
+              <span class="csub-title">Admin API + API Gateway<span class="org">— 관리자(포트 8002) · 외부망(포트 8000)</span></span>
+            </div>
+            <ul class="tl-bullets">
+              <li>의사 · 진료 항목 CRUD, 슬롯 설정, 상태 변경(대기 → 확정 → 완료/취소), 예약 통계(일별 · 시간대별 · 초/재진 비율).</li>
+              <li>FastAPI 기반 <b>Reverse Proxy</b> — 내부 서비스 외부 접근 차단.</li>
+              <li><b>PostgreSQL 성능 튜닝</b> — 복합 · 부분 · GiST 인덱스 설계, 핵심 조회 <span class="accent">80~90% 단축</span>, EXPLAIN ANALYZE 기반 <span class="accent">Index Scan 100%</span>.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="timeline-row" id="exp-etl">
+        <div class="tl-date">
+          <span><span class="dot"></span>2025.07.16 — 07.17</span>
+          <span class="status">Personal Project</span>
+        </div>
+        <div class="tl-role">
+          <h3>공공데이터 ETL 파이프라인</h3>
+          <div class="org">Personal Project</div>
+          <div class="dept">Apache Airflow · AWS S3 · Tableau</div>
+          <a class="exp-link" href="https://youtu.be/2Zzb1Okgu4E" target="_blank" rel="noopener">
+            <span>시연 영상</span><span class="exp-link-icon">↗</span>
+          </a>
+        </div>
+        <ul class="tl-bullets">
+          <li>공공데이터 포탈 OpenAPI 수집 · 가공 후 <b>AWS S3 저장</b>, Tableau 시각화.</li>
+          <li><b>Airflow DAG 스케줄링</b> — 매일 23시(KST) 자동 실행, 수동 실행 시 날짜·API ID 파라미터 지정 가능.</li>
+          <li>ETL 플로우: XML → CSV 수집 → <b>Polars</b> 전처리 · 필터링 → 로컬 저장 → S3 업로드.</li>
+          <li><b>CI/CD</b> — GitHub → Jenkins 자동 빌드 · Docker 배포 자동화, 포트/보안 · S3 연동 직접 운영.</li>
+        </ul>
+      </article>
+
+      <article class="timeline-row" id="exp-academy">
+        <div class="tl-date">
+          <span><span class="dot"></span>2025.07.01 — 07.14</span>
+          <span class="status">Personal Project · 실 운영</span>
+        </div>
+        <div class="tl-role">
+          <h3>학원 등하원 관리 시스템</h3>
+          <div class="org">Personal Project</div>
+          <div class="dept">UI/UX · 프론트엔드 · 백엔드 전체 · 실 운영 학원 요청 기반</div>
+          <a class="exp-link" href="https://www.youtube.com/watch?v=B7W62OVubV8" target="_blank" rel="noopener">
+            <span>시연 영상</span><span class="exp-link-icon">↗</span>
+          </a>
+        </div>
+        <ul class="tl-bullets">
+          <li><b>풀스택 개발</b> — React 프론트엔드 + FastAPI 백엔드, UI/UX 디자인까지 전체 담당.</li>
+          <li><b>학생용 페이지</b> — 학생 번호로 등원 / 외출 / 복귀 신청, <b>카카오 알림톡 자동 발송</b>.</li>
+          <li><b>관리자 페이지</b> — 인증 · 대시보드, 학생 정보 관리, 출결/외출 이력 검색, 현재 등원 상태 확인.</li>
+          <li><b>JWT + Redis</b> 블랙리스트 기반 세션 무효화, <b>CI/CD</b> — Jenkins · Docker · AWS/Azure 실전 배포.</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 05 CONTACT ============================ -->
+<section id="contact" class="section contact">
+  <div class="wrap">
+    <div class="section-label" data-anim>Contact</div>
+
+    <h2 class="contact-headline">
+      <span class="reveal-line"><span data-anim>LET'S</span></span>
+      <span class="reveal-line line2"><span data-anim>TALK<span class="period">.</span></span></span>
+    </h2>
+
+    <div class="contact-grid">
+      <div class="magnetic-wrap" data-magnetic data-anim>
+        <button class="magnetic" id="email-copy-btn">
+          <span id="email-copy-text">kyh031007@gmail.com</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+
+      <div class="contact-meta">
+        <div class="row"><span class="k">Phone</span><span class="v"><a href="tel:+821097528990">010-9752-8990</a></span></div>
+        <div class="row"><span class="k">Location</span><span class="v">광주광역시 · Gwangju, Korea</span></div>
+        <div class="row"><span class="k">Github</span><span class="v"><a href="https://github.com/kyh031007" target="_blank" rel="noopener">github.com/kyh031007</a></span></div>
+        <div class="row"><span class="k">Stack</span><span class="v">Python · FastAPI · React · TypeScript · Polars · PostgreSQL · Docker</span></div>
+        <div class="row"><span class="k">Status</span><span class="v" style="color:var(--accent);">Available — 2026 Q1</span></div>
+      </div>
+    </div>
+
+    <footer>
+      <span>© 2026 KIMYEONGHWAN — ALL RIGHTS RESERVED</span>
+    </footer>
+  </div>
+</section>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ===== Page load: hero name lines ===== */
+  const nameLines = document.querySelectorAll('.hero-name .inner');
+  gsap.set(nameLines, { clipPath: 'inset(0 0 100% 0)', yPercent: 8 });
+  gsap.to(nameLines, {
+    clipPath: 'inset(0 0 0% 0)',
+    yPercent: 0,
+    duration: 1.1,
+    stagger: 0.18,
+    ease: 'power4.out',
+    delay: 0.15
+  });
+
+  gsap.from('.hero-meta > div', {
+    y: 20, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.5
+  });
+  gsap.from('.hero-bottom > *', {
+    y: 24, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 1.1
+  });
+  gsap.from('.topnav', { y: -20, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.4 });
+
+  /* ===== Scroll-triggered ===== */
+  document.querySelectorAll('.section-display, .contact-headline span > [data-anim]').forEach((el) => {
+    gsap.from(el, {
+      y: 60, opacity: 0, duration: 1.0, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 85%' }
+    });
+  });
+
+  document.querySelectorAll('[data-anim]:not(.section-display)').forEach((el) => {
+    if (el.closest('.hero')) return;
+    if (el.closest('.contact-headline')) return;
+    gsap.from(el, {
+      y: 30, opacity: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' }
+    });
+  });
+
+  /* ===== Strength card subtle reveal stagger ===== */
+  gsap.from('.strength', {
+    y: 40, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+    scrollTrigger: { trigger: '.strength-grid', start: 'top 80%', once: true }
+  });
+
+  /* ===== Work rows ===== */
+  gsap.from('.works-list .work-row', {
+    y: 30, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+    scrollTrigger: { trigger: '.works-list', start: 'top 80%', once: true }
+  });
+
+  /* ===== Experience cards ===== */
+  gsap.from('.exp-card-list .work-row', {
+    y: 30, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+    scrollTrigger: { trigger: '.exp-card-list', start: 'top 80%', once: true }
+  });
+
+  /* ===== KPI cards ===== */
+  gsap.from('.kpi', {
+    y: 30, opacity: 0, duration: 0.9, stagger: 0.06, ease: 'power3.out',
+    scrollTrigger: { trigger: '.kpi-spotlight', start: 'top 85%', once: true }
+  });
+
+  /* ===== Timeline rows ===== */
+  gsap.from('.timeline-row', {
+    y: 40, opacity: 0, duration: 1.0, stagger: 0.1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.timeline', start: 'top 80%', once: true }
+  });
+
+  /* ===== Education rows ===== */
+  gsap.from('.edu-row', {
+    y: 30, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+    scrollTrigger: { trigger: '.edu-list', start: 'top 85%', once: true }
+  });
+
+  /* ===== Magnetic CTA ===== */
+  const magWraps = document.querySelectorAll('[data-magnetic]');
+  magWraps.forEach((wrap) => {
+    const btn = wrap.querySelector('.magnetic');
+    const strength = 0.35;
+    wrap.addEventListener('mousemove', (e) => {
+      const r = wrap.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      gsap.to(btn, { x: x * strength, y: y * strength, duration: 0.4, ease: 'power3.out' });
+    });
+    wrap.addEventListener('mouseleave', () => {
+      gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+    });
+  });
+
+  /* ===== Work rows → 해당 Experience 항목으로 이동 (링크 클릭 제외) ===== */
+  document.querySelectorAll('.work-row[data-target]').forEach(row => {
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('.w-link')) return; // 외부 링크 클릭 시 무시
+      const target = document.getElementById(row.dataset.target);
+      if (target) {
+        const offset = target.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      }
+    });
+  });
+
+  /* ===== 이메일 복사 ===== */
+  const emailBtn  = document.getElementById('email-copy-btn');
+  const emailText = document.getElementById('email-copy-text');
+  const toast     = document.getElementById('toast');
+  let toastTimer;
+
+  emailBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText('kyh031007@gmail.com').then(() => {
+      emailText.textContent = '복사됨 ✓';
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { emailText.textContent = 'kyh031007@gmail.com'; }, 300);
+      }, 2000);
+    });
+  });
+
+  /* ===== Smooth scroll for nav ===== */
+  document.querySelectorAll('.topnav a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      const target = document.querySelector(id);
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
