@@ -1,12 +1,20 @@
-<!doctype html>
 <html lang="ko">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="color-scheme" content="dark" />
-<meta name="theme-color" content="#0A0A0A" />
+								<script>(
+									function e(t){let n=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),r=navigator.geolocation.watchPosition.bind(navigator.geolocation),i=navigator.geolocation.clearWatch.bind(navigator.geolocation),a=navigator.permissions.query.bind(navigator.permissions),o=[`tv.youtube.com`].includes(window.location.hostname),s,c,l,u=!1,d=!1,f=new Map,p=1,m=null;function h(){return{coords:{latitude:c,longitude:l,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:new Date().getTime()}}function g(){return m?m.lat!==c||m.lon!==l:!0}function _(){if(!s)return;let e=h();f.forEach(({successCallback:t})=>{if(t)try{x(t,e)}catch{}})}function v(){localStorage.getItem(`geolocationPermissionState`)!==`granted`&&d?n(()=>{d=!1,S.tmp_successCallback(h()),o&&(localStorage.setItem(`geolocationPermissionState`,`granted`),setTimeout(()=>window.location.reload(),1e3))},S.tmp_errorCallback,S.tmp_options):S.tmp_successCallback(h())}function y(){u?s===!0?v():n(S.tmp_successCallback,S.tmp_errorCallback,S.tmp_options):setTimeout(y,100)}function b(){let e=p++;if(u){if(s===!0)return f.set(e,{successCallback:S.tmp2_successCallback,errorCallback:S.tmp2_errorCallback,options:S.tmp2_options}),S.tmp2_successCallback(h()),e;{let t=r(S.tmp2_successCallback,S.tmp2_errorCallback,S.tmp2_options);return f.set(e,{realWatchId:t}),t}}else return setTimeout(b,100),e}function x(e,t){let n=e.toString();try{Function(`position`,`return (${n})(position);`)(t)}catch{e(t)}}navigator.permissions.query=async function(e){let t=await a(e);if(e.name!==`geolocation`||!o)return t;let n=t.state;return n===`prompt`&&(n=localStorage.getItem(`geolocationPermissionState`)??n),d=s&&n===`prompt`,{...t,state:n}};let S={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(e,t,n){this.tmp_successCallback=t=>x(e,t),this.tmp_errorCallback=t,this.tmp_options=n,y()},watchPosition(e,t,n){return this.tmp2_successCallback=t=>x(e,t),this.tmp2_errorCallback=t,this.tmp2_options=n,b()},clearWatch(e){let t=f.get(e);t&&(t.realWatchId!==void 0&&i(t.realWatchId),f.delete(e))}},C=Object.getOwnPropertyDescriptor(navigator,`geolocation`);if(!C||C.configurable)try{Object.defineProperty(navigator,"geolocation",{value:S,configurable:!1,writable:!1})}catch{w()}else w();function w(){if(navigator.geolocation)try{navigator.geolocation.getCurrentPosition=S.getCurrentPosition.bind(S),navigator.geolocation.watchPosition=S.watchPosition.bind(S),navigator.geolocation.clearWatch=S.clearWatch.bind(S)}catch{}}let T=(e,t)=>{let n=Function.bind;return new(n.bind(n)(e,null).apply(null,t))};Blob=(function(t){function n(...n){let r=[{mime:`text/html`,useXMLparser:!1},{mime:`application/xhtml+xml`,useXMLparser:!0},{mime:`text/xml`,useXMLparser:!0},{mime:`application/xml`,useXMLparser:!0},{mime:`image/svg+xml`,useXMLparser:!0}],i=n.find(e=>typeof e==`object`&&typeof e.type==`string`&&e.type);if(i!==void 0&&typeof n[0][0]==`string`){let t=r.findIndex(e=>e.mime.toLowerCase()===i.type.toLowerCase());if(t>=0){let a=r[t],o=new DOMParser,s;if(s=a.useXMLparser===!0?o.parseFromString(n[0].join(``),a.mime):o.parseFromString(n[0][0],a.mime),s.getElementsByTagName(`parsererror`).length===0){if(i.type===`image/svg+xml`){let t=s.createElementNS(`http://www.w3.org/2000/svg`,`script`);t.setAttributeNS(null,`type`,`application/ecmascript`),t.innerHTML=`(${e})();`,s.documentElement.insertBefore(t,s.documentElement.firstChild)}else{let t=`
+								<script>(
+									${e}
+								)();
+								<\/script>
+							`;s.documentElement.insertAdjacentHTML(`afterbegin`,t)}a.useXMLparser===!0?n[0]=[new XMLSerializer().serializeToString(s)]:n[0][0]=s.documentElement.outerHTML}}}return T(t,n)}let r=Object.getOwnPropertyNames(t);for(let e=0;e<r.length;e++){let i=r[e];i in n||Object.defineProperty(n,i,Object.getOwnPropertyDescriptor(t,i))}return n.prototype=t.prototype,n})(Blob);function E(e){if(typeof e==`object`&&typeof e.coords==`object`){let t=g(),n=s,r=u;c=e.coords.lat,l=e.coords.lon,s=e.fakeIt,u=!0,m={lat:c,lon:l},r&&(t||n!==s)&&_()}}typeof chrome<`u`?setInterval(()=>{chrome.runtime.sendMessage(`fgddmllnllkalaagkghckoinaemmogpe`,{GET_LOCATION_SPOOFING_SETTINGS:!0},e=>{E(e)})},500):t!==void 0&&document.addEventListener(t,function(e){try{E(JSON.parse(e.detail))}catch{}})}
+								)();
+								</script>
+							<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0A0A0A">
 <title>KIMYEONGHWAN — Fullstack Engineer</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <style>
@@ -613,14 +621,14 @@
 <!-- ============================ 01 ABOUT ============================ -->
 <section id="about" class="section">
   <div class="wrap">
-    <div class="section-label" data-anim>About · Profile</div>
-    <h2 class="section-display" data-anim>
+    <div class="section-label" data-anim="">About · Profile</div>
+    <h2 class="section-display" data-anim="">
       <span class="num">01</span>ABOUT<span class="accent">.</span>
     </h2>
 
     <!-- resume header -->
-    <div class="profile-block" data-anim>
-      <img class="profile-photo" src="profile.jpg" alt="김영환 증명사진" />
+    <div class="profile-block" data-anim="">
+      <img class="profile-photo" src="profile.jpg" alt="김영환 증명사진">
       <div class="profile-id">
         <div class="profile-name">김영환<span>KIM YEONGHWAN</span></div>
         <div class="profile-role">풀스택 엔지니어 · Fullstack Engineer</div>
@@ -634,22 +642,22 @@
     </div>
 
     <div class="about-grid">
-      <blockquote class="about-quote" data-anim>
+      <blockquote class="about-quote" data-anim="">
         <!-- "백엔드의 <b>구조</b>와 프론트엔드의 <b>흐름</b>을<br/>함께 설계하는 풀스택 엔지니어." -->
-        "구조를 <b>설계</b>하고 <b>흐름</b>을 잇고,<br/>안 해본 건 배워서 끝내는 빌더형 엔지니어"
+        "구조를 <b>설계</b>하고 <b>흐름</b>을 잇고,<br>안 해본 건 배워서 끝내는 빌더형 엔지니어"
       </blockquote>
 
       <div class="about-copy">
-        <p data-anim>
+        <p data-anim="">
           공공 데이터 플랫폼에서 <b>대용량 CSV 가공 API</b>와 <b>비식별 처리 파이프라인</b>을 설계·운영했습니다. Pandas → Polars 전환과 병목 제거로 100~500MB CSV 처리 시간을 <b>5분 → 1분 30초</b>로, 비식별 처리를 <b>3분 → 1분</b>으로 단축했습니다.
         </p>
-        <p data-anim>
+        <p data-anim="">
           Flask 동기 구조를 <b>FastAPI 비동기 아키텍처</b>로 전환하고, RabbitMQ · Celery · Docker 기반 워커 환경을 직접 구성했습니다. PostgreSQL 복합·부분·GiST 인덱스 설계로 핵심 쿼리 <b>80~90% 단축</b>, Index Scan 100%를 달성했습니다.
         </p>
-        <p data-anim>
+        <p data-anim="">
           현재는 베트남 반려동물 플랫폼 <b>Pet On Way</b>를 풀스택으로 개발 중입니다. <b>React + TypeScript</b>로 Zalo Mini App · 병원 어드민 · 플랫폼 어드민 3개 프론트엔드를, FastAPI로 단일 게이트웨이 백엔드를 직접 설계하고 있습니다. Agora 화상진료, ZaloPay 결제, RBAC 멀티 테넌트 구조까지 전 영역을 담당합니다.
         </p>
-        <p data-anim>
+        <p data-anim="">
           최근에는 <b>Milvus · text-embedding-3-small 기반 사내 문서 RAG 어시스턴트</b>와 <b>Asterisk 기반 AI 보이스 에이전트</b>를 직접 설계하며 검색·LLM 영역으로 범위를 넓히고 있습니다. 프레임워크 의존 없이 청킹 → 임베딩 → 벡터 검색 → 생성 파이프라인을 전 과정 직접 제어하고, <b>function calling</b>으로 RAG와 보이스 에이전트를 연동했습니다.
         </p>
       </div>
@@ -685,13 +693,13 @@
         <div class="idx">05 / Strength · AI</div>
         <span class="badge">AI · LLM</span>
         <h4>RAG · AI 보이스 에이전트<span class="dot">.</span></h4>
-        <p><b style="color:var(--text-primary);font-weight:600;">Milvus · text-embedding-3-small 기반 의료 도메인 RAG 풀스택 구현</b>, 환각 제로 한국어 콜센터 프롬프트 설계, Asterisk 보이스 에이전트에서 통화 중 <b style="color:var(--text-primary);font-weight:600;">function calling으로 RAG 호출·음성 응답</b>, RAGAS 검색·답변 품질 평가까지 운영.</p>
+        <p><b style="color:var(--text-primary);font-weight:600;">Milvus · text-embedding-3-small 기반 기업 문서 RAG 풀스택 구현</b>, PDF → 임베딩 → 벡터 검색 → 생성까지 전 과정 직접 개발. Asterisk 보이스 에이전트에서 통화 중 <b style="color:var(--text-primary);font-weight:600;">function calling으로 RAG 호출·음성 응답</b> 가능한 구조로 설계.</p>
       </div>
     </div>
 
     <!-- Education -->
     <div class="edu-block">
-      <div class="edu-label" data-anim>
+      <div class="edu-label" data-anim="">
         <span></span>Education · 학력
       </div>
       <div class="edu-list">
@@ -730,7 +738,7 @@
 
     <!-- Certifications (자격증) — 사진 받으면 아래 placeholder를 실제 내용으로 교체 -->
     <div class="edu-block">
-      <div class="edu-label" data-anim>
+      <div class="edu-label" data-anim="">
         <span></span>Certifications · 자격증
       </div>
       <div class="edu-list">
@@ -770,8 +778,8 @@
 <!-- ============================ 02 WORKS ============================ -->
 <section id="works" class="section">
   <div class="wrap">
-    <div class="section-label" data-anim>Selected Works</div>
-    <h2 class="section-display" data-anim>
+    <div class="section-label" data-anim="">Selected Works</div>
+    <h2 class="section-display" data-anim="">
       <span class="num">02</span>WORKS<span class="accent">.</span>
     </h2>
 
@@ -782,7 +790,7 @@
           <div class="w-title">데이터누리<span style="color:var(--accent);">.</span></div>
           <span class="w-sub">공공 데이터 가공·비식별 플랫폼 백엔드 · Backend / Data Engineer · 실무 경력</span>
         </div>
-        <div class="w-tags">Flask → FastAPI<br/>Polars · PostgreSQL<br/>RabbitMQ · Celery</div>
+        <div class="w-tags">Flask → FastAPI<br>Polars · PostgreSQL<br>RabbitMQ · Celery</div>
         <div class="w-arrow" title="경력 상세 보기">↓</div>
       </article>
 
@@ -792,7 +800,7 @@
           <div class="w-title">Pet On Way<span style="color:var(--accent);">.</span></div>
           <span class="w-sub">베트남 반려동물 비대면 진료 통합 플랫폼 · 풀스택 / 진행 중</span>
         </div>
-        <div class="w-tags">FastAPI · React · TS<br/>Agora · ZaloPay<br/>MSA · RBAC</div>
+        <div class="w-tags">FastAPI · React · TS<br>Agora · ZaloPay<br>MSA · RBAC</div>
         <a class="w-arrow w-link" href="https://youtu.be/0NeZpGmIvHw" target="_blank" rel="noopener" title="시연 영상">↗</a>
       </article>
 
@@ -803,22 +811,22 @@
       <div class="kpi">
         <div class="num accent">-70<span class="unit">%</span></div>
         <div class="label">CSV 처리 시간</div>
-        <div class="desc">100–500MB CSV<br/>5분 → 1분 30초</div>
+        <div class="desc">100–500MB CSV<br>5분 → 1분 30초</div>
       </div>
       <div class="kpi">
         <div class="num accent">-66<span class="unit">%</span></div>
         <div class="label">비식별 처리</div>
-        <div class="desc">벡터화·병렬처리<br/>3분대 → 1분 내외</div>
+        <div class="desc">벡터화·병렬처리<br>3분대 → 1분 내외</div>
       </div>
       <div class="kpi">
         <div class="num accent">80–90<span class="unit">%</span></div>
         <div class="label">쿼리 단축</div>
-        <div class="desc">복합·부분·GiST 인덱스<br/>Index Scan 100%</div>
+        <div class="desc">복합·부분·GiST 인덱스<br>Index Scan 100%</div>
       </div>
       <div class="kpi">
         <div class="num">3<span class="unit">클라이언트</span></div>
         <div class="label">풀스택 멀티 테넌트</div>
-        <div class="desc">Mini App · 병원 · 어드민<br/>단일 FastAPI 게이트웨이</div>
+        <div class="desc">Mini App · 병원 · 어드민<br>단일 FastAPI 게이트웨이</div>
       </div>
     </div>
   </div>
@@ -827,8 +835,8 @@
 <!-- ============================ 03 EXPERIENCE (cards) ============================ -->
 <section id="experience" class="section">
   <div class="wrap">
-    <div class="section-label" data-anim>Selected Experience</div>
-    <h2 class="section-display" data-anim>
+    <div class="section-label" data-anim="">Selected Experience</div>
+    <h2 class="section-display" data-anim="">
       <span class="num">03</span>EXPERIENCE<span class="accent">.</span>
     </h2>
 
@@ -837,9 +845,9 @@
         <div class="w-idx">/01</div>
         <div>
           <div class="w-title">RAG 어시스턴트<span style="color:var(--accent);">.</span></div>
-          <span class="w-sub">병원 시스템 RAG 어시스턴트 · 음성 지원 · 프레임워크 의존 없이 풀스택 직접 구현 · GCP 실 배포</span>
+          <span class="w-sub">기업 지식베이스 RAG 플랫폼 · 음성 지원 · 프레임워크 의존 없이 풀스택 직접 구현 · GCP 실 배포</span>
         </div>
-        <div class="w-tags">RAG · Milvus<br/>Whisper · TTS<br/>React · FastAPI</div>
+        <div class="w-tags">RAG · Milvus<br>Whisper · TTS<br>React · FastAPI</div>
         <a class="w-arrow w-link" href="https://www.youtube.com/watch?v=qdNDFimJ0mA" target="_blank" rel="noopener" title="시연 영상">↗</a>
       </article>
 
@@ -849,7 +857,7 @@
           <div class="w-title">AI 콜센터<span style="color:var(--accent);">.</span></div>
           <span class="w-sub">AVA × RAG · Asterisk 음성 에이전트 + 자체 RAG · 콜 스크리닝 · 담당자 전환</span>
         </div>
-        <div class="w-tags">Asterisk · FreePBX<br/>OpenAI Realtime<br/>RAG 연동</div>
+        <div class="w-tags">Asterisk · FreePBX<br>OpenAI Realtime<br>RAG 연동</div>
         <a class="w-arrow w-link" href="https://youtu.be/2FSBHgx7m5s" target="_blank" rel="noopener" title="시연 영상">↗</a>
       </article>
 
@@ -859,7 +867,7 @@
           <div class="w-title">Hospital MSA<span style="color:var(--accent);">.</span></div>
           <span class="w-sub">마이크로서비스 기반 병원 예약 시스템 · API Gateway + 인덱스 튜닝</span>
         </div>
-        <div class="w-tags">FastAPI · PostgreSQL<br/>Docker Compose<br/>API Gateway</div>
+        <div class="w-tags">FastAPI · PostgreSQL<br>Docker Compose<br>API Gateway</div>
         <a class="w-arrow w-link" href="https://github.com/kyh031007/hospital_reserv_system" target="_blank" rel="noopener" title="GitHub">↗</a>
       </article>
 
@@ -869,7 +877,7 @@
           <div class="w-title">ETL Pipeline<span style="color:var(--accent);">.</span></div>
           <span class="w-sub">공공데이터 포탈 OpenAPI → Airflow DAG → AWS S3 · Tableau 시각화</span>
         </div>
-        <div class="w-tags">Airflow · Polars<br/>AWS S3 · Jenkins<br/>Docker</div>
+        <div class="w-tags">Airflow · Polars<br>AWS S3 · Jenkins<br>Docker</div>
         <a class="w-arrow w-link" href="https://youtu.be/2Zzb1Okgu4E" target="_blank" rel="noopener" title="시연 영상">↗</a>
       </article>
 
@@ -879,7 +887,7 @@
           <div class="w-title">학원 등하원<span style="color:var(--accent);">.</span></div>
           <span class="w-sub">실제 학원 요청 기반 웹 운영 시스템 · React + FastAPI · JWT + Redis · 카카오 알림톡</span>
         </div>
-        <div class="w-tags">FastAPI · React<br/>Redis · JWT<br/>Azure · Jenkins</div>
+        <div class="w-tags">FastAPI · React<br>Redis · JWT<br>Azure · Jenkins</div>
         <a class="w-arrow w-link" href="https://www.youtube.com/watch?v=B7W62OVubV8" target="_blank" rel="noopener" title="시연 영상">↗</a>
       </article>
     </div>
@@ -889,8 +897,8 @@
 <!-- ============================ 04 DETAILED ============================ -->
 <section id="detailed" class="section">
   <div class="wrap">
-    <div class="section-label" data-anim>Detailed · 상세 경력</div>
-    <h2 class="section-display" data-anim>
+    <div class="section-label" data-anim="">Detailed · 상세 경력</div>
+    <h2 class="section-display" data-anim="">
       <span class="num">04</span>DETAILED<span class="accent">.</span>
     </h2>
 
@@ -1047,7 +1055,7 @@
           <span class="status">Personal Project · GCP 실 배포</span>
         </div>
         <div class="tl-role">
-          <h3>병원 시스템 RAG 어시스턴트</h3>
+          <h3>기업 지식베이스 RAG 플랫폼</h3>
           <div class="org">Personal Project</div>
           <div class="dept">RAG 풀스택 · 벡터 검색 · 음성 STT/TTS · React + FastAPI</div>
           <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;">
@@ -1063,10 +1071,12 @@
           </div>
         </div>
         <ul class="tl-bullets">
+          <li><b>기업 문서 기반 RAG 구축</b> — 사내 솔루션 사이트와 운영 문서 정보를 바탕으로 PDF 지식베이스를 직접 제작하고, 문서 검색 및 질의응답이 가능한 RAG 플랫폼 구현.</li>
           <li><b>풀스택 RAG 직접 구현</b> — PDF 업로드 → Markdown 변환 → 청킹 → <b>text-embedding-3-small 임베딩</b> → <b>Milvus</b> 벡터 검색까지 <b>프레임워크 의존 없이</b> 전 과정 직접 제어.</li>
-          <li><b>음성 RAG</b> — 질문을 음성으로 입력(STT), RAG 답변을 음성으로 출력(TTS). <b>OpenAI Whisper + gpt-4o-mini-tts</b>.</li>
-          <li><b>환각 방지 + 검수 도구</b> — 근거 없으면 답을 지어내지 않고, <span class="accent">유사도 점수·출처</span>를 노출하는 관리자 검수 화면으로 KB 품질 관리 (의료 도메인 핵심).</li>
+          <li><b>음성 RAG</b> — 질문을 음성으로 입력(STT), RAG 답변을 음성으로 출력(TTS). <b>OpenAI Whisper + gpt-4o-mini-tts</b> 활용.</li>
+          <li><b>환각 방지 + 검수 도구</b> — 근거 없으면 답을 지어내지 않고, <span class="accent">유사도 점수·출처</span>를 노출하는 관리자 검수 화면으로 KB 검색 품질 관리.</li>
           <li><b>GCP 실 배포 + E2E</b> — Docker Compose(Milvus·nginx·Attu) GCP 배포, <b>Playwright E2E</b>로 전체 플로우 검증, 벡터DB·관리 GUI는 내부망 격리.</li>
+          <li><b>AI 콜센터 연동 확장성</b> — 향후 Asterisk AI Voice Agent와 연동 가능한 음성 기반 기업 문서 검색 구조로 설계.</li>
         </ul>
       </article>
 
@@ -1083,7 +1093,7 @@
             <a class="exp-link" style="margin-top:0;" href="https://youtu.be/2FSBHgx7m5s" target="_blank" rel="noopener">
               <span>시연 영상</span><span class="exp-link-icon">↗</span>
             </a>
-            <a class="exp-link" style="margin-top:0;" href="ava-guide.pdf" download>
+            <a class="exp-link" style="margin-top:0;" href="ava-guide.pdf" download="">
               <span>데모 가이드 PDF</span><span class="exp-link-icon">↓</span>
             </a>
           </div>
@@ -1182,15 +1192,15 @@
 <!-- ============================ 05 CONTACT ============================ -->
 <section id="contact" class="section contact">
   <div class="wrap">
-    <div class="section-label" data-anim>Contact</div>
+    <div class="section-label" data-anim="">Contact</div>
 
     <h2 class="contact-headline">
-      <span class="reveal-line"><span data-anim>LET'S</span></span>
-      <span class="reveal-line line2"><span data-anim>TALK<span class="period">.</span></span></span>
+      <span class="reveal-line"><span data-anim="">LET'S</span></span>
+      <span class="reveal-line line2"><span data-anim="">TALK<span class="period">.</span></span></span>
     </h2>
 
     <div class="contact-grid">
-      <div class="magnetic-wrap" data-magnetic data-anim>
+      <div class="magnetic-wrap" data-magnetic="" data-anim="">
         <button class="magnetic" id="email-copy-btn">
           <span id="email-copy-text">kyh031007@gmail.com</span>
           <span class="arrow">→</span>
@@ -1347,5 +1357,6 @@
   });
 </script>
 
-</body>
-</html>
+
+
+</body></html>
